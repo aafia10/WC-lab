@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Modern Registration Form</title>
+  <style>
+    /* ---------- Global Reset ---------- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #4e54c8, #8f94fb);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      padding: 20px;
+    }
+
+    /* ---------- Form Container ---------- */
+    .form-container {
+      background: #fff;
+      padding: 2rem 2.5rem;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      width: 100%;
+      max-width: 450px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #4e54c8;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ---------- Form Fields ---------- */
+    label {
+      display: block;
+      margin-bottom: 0.4rem;
+      font-weight: 600;
+      color: #333;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    input[type="email"],
+    textarea {
+      width: 100%;
+      padding: 0.7rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin-bottom: 0.5rem;
+      transition: border 0.3s ease;
+    }
+
+    input:focus,
+    textarea:focus {
+      border-color: #4e54c8;
+      outline: none;
+    }
+
+    /* ---------- Error Messages ---------- */
+    .error {
+      color: #e63946;
+      font-size: 0.85rem;
+      margin-bottom: 0.8rem;
+      display: none;
+    }
+
+    /* ---------- Button ---------- */
+    input[type="submit"] {
+      background: #4e54c8;
+      color: #fff;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 1rem;
+      transition: background 0.3s ease;
+    }
+
+    input[type="submit"]:hover {
+      background: #5f64f1;
+    }
+
+    /* ---------- Success Message ---------- */
+    .success {
+      text-align: center;
+      color: #2a9d8f;
+      font-weight: 600;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>Registration Form</h2>
+    <form id="regForm" onsubmit="return validateForm()">
+      <!-- First Name -->
+      <label for="firstName">First Name</label>
+      <input type="text" id="firstName" placeholder="Enter first name" />
+      <div class="error" id="firstNameError"></div>
+
+      <!-- Last Name -->
+      <label for="lastName">Last Name</label>
+      <input type="text" id="lastName" placeholder="Enter last name" />
+      <div class="error" id="lastNameError"></div>
+
+      <!-- Password -->
+      <label for="password">Password</label>
+      <input type="password" id="password" placeholder="Enter password" />
+      <div class="error" id="passwordError"></div>
+
+      <!-- Email -->
+      <label for="email">Email</label>
+      <input type="email" id="email" placeholder="Enter email address" />
+      <div class="error" id="emailError"></div>
+
+      <!-- Mobile -->
+      <label for="mobile">Mobile Number</label>
+      <input type="text" id="mobile" placeholder="Enter 10-digit mobile number" />
+      <div class="error" id="mobileError"></div>
+
+      <!-- Address -->
+      <label for="address">Address</label>
+      <textarea id="address" rows="3" placeholder="Enter your address"></textarea>
+      <div class="error" id="addressError"></div>
+
+      <input type="submit" value="Register" />
+    </form>
+
+    <div class="success" id="successMsg"></div>
+  </div>
+
+  <script>
+    function validateForm() {
+      // Fetch values
+      const firstName = document.getElementById("firstName").value.trim();
+      const lastName = document.getElementById("lastName").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const mobile = document.getElementById("mobile").value.trim();
+      const address = document.getElementById("address").value.trim();
+
+      // Error divs
+      const errors = {
+        firstName: document.getElementById("firstNameError"),
+        lastName: document.getElementById("lastNameError"),
+        password: document.getElementById("passwordError"),
+        email: document.getElementById("emailError"),
+        mobile: document.getElementById("mobileError"),
+        address: document.getElementById("addressError"),
+      };
+
+      // Reset all error messages
+      for (let key in errors) {
+        errors[key].style.display = "none";
+        errors[key].innerText = "";
+      }
+
+      let valid = true;
+
+      // Name pattern
+      const namePattern = /^[A-Za-z]+$/;
+      if (!firstName) {
+        errors.firstName.innerText = "First name cannot be empty.";
+        errors.firstName.style.display = "block";
+        valid = false;
+      } else if (!namePattern.test(firstName)) {
+        errors.firstName.innerText = "Only alphabets are allowed.";
+        errors.firstName.style.display = "block";
+        valid = false;
+      }
+
+      if (!lastName) {
+        errors.lastName.innerText = "Last name cannot be empty.";
+        errors.lastName.style.display = "block";
+        valid = false;
+      } else if (!namePattern.test(lastName)) {
+        errors.lastName.innerText = "Only alphabets are allowed.";
+        errors.lastName.style.display = "block";
+        valid = false;
+      }
+
+      if (password.length < 6) {
+        errors.password.innerText = "Password must be at least 6 characters.";
+        errors.password.style.display = "block";
+        valid = false;
+      } else if (!/[A-Z]/.test(password) || !/[0-9]/.test(password) || !/[!@#$%^&*]/.test(password)) {
+        errors.password.innerText = "Password must contain at least 1 uppercase letter, 1 number, and 1 symbol.";
+        errors.password.style.display = "block";
+        valid = false;
+      }
+
+      const emailPattern = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
+      if (!emailPattern.test(email)) {
+        errors.email.innerText = "Please enter a valid email (e.g. example@gmail.com).";
+        errors.email.style.display = "block";
+        valid = false;
+      }
+
+      const mobilePattern = /^[0-9]{10}$/;
+      if (!mobilePattern.test(mobile)) {
+        errors.mobile.innerText = "Mobile number must be exactly 10 digits.";
+        errors.mobile.style.display = "block";
+        valid = false;
+      }
+
+      if (address.length < 10) {
+        errors.address.innerText = "Address should be at least 10 characters.";
+        errors.address.style.display = "block";
+        valid = false;
+      }
+
+      if (valid) {
+        document.getElementById("successMsg").innerText = "🎉 Form submitted successfully!";
+      } else {
+        document.getElementById("successMsg").innerText = "";
+      }
+
+      return valid;
+    }
+  </script>
+</body>
+</html>
